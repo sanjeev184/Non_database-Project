@@ -16,13 +16,11 @@ namespace UnitTest
         public Fixture _fixture;
         public Mock<ICricketerRepo> _cricketServiceMock;
         public CricketController _sut;
-        // private Mock<IMapper> _mapperMock
         [SetUp]
         public void TestInitialize()
         {
             _fixture = new Fixture();
             _cricketServiceMock = new Mock<ICricketerRepo>();
-            //_mapperMock = new Mock<IMapper>();
 
             _sut = new CricketController(_cricketServiceMock.Object);
         }
@@ -117,6 +115,17 @@ namespace UnitTest
         }
 
         [Test]
+        public void Insert_Call_service_Layer_Once()
+        {
+            var id = _fixture.Create<int>();
+            var cricketTeams = _fixture.Create<CricketTeam>();
+            _cricketServiceMock.Setup(x => x.Add(cricketTeams)).Returns((CricketTeam)null);
+            var result = _sut.Insert(cricketTeams);
+            _cricketServiceMock.Verify(x => x.Add(cricketTeams), Times.Once);
+        }
+
+
+        [Test]
         public void Remove_Return_200_ok()
         {
             var id = _fixture.Create<int>();
@@ -139,6 +148,29 @@ namespace UnitTest
             _cricketServiceMock.Verify(x=>x.Remove(id), Times.Once);
         }
 
+        [Test]
+        public void Update_Call_service_Layer_Once()
+        {
+            var id = _fixture.Create<int>();
+            var cricketTeams = _fixture.Create<CricketTeam>();
+            _cricketServiceMock.Setup(x => x.Update(cricketTeams)).Returns(true);
+            var result = _sut.Update(cricketTeams);
+            _cricketServiceMock.Verify(x => x.Update(cricketTeams), Times.Once);
+        }
+
+        [Test]
+        public void Update_Return_200_ok()
+        {
+            var id = _fixture.Create<int>();
+            var cricketTeams = _fixture.Create<CricketTeam>();
+            _cricketServiceMock.Setup(x => x.Update(cricketTeams)).Returns(true);
+            var result = _sut.Update(cricketTeams) as OkObjectResult;
+
+            using (new AssertionScope())
+            {
+                result.StatusCode.Should().Be(StatusCodes.Status200OK);
+            }
+        }
 
     }
 }

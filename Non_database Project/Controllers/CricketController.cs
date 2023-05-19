@@ -16,20 +16,20 @@ namespace Non_database_Project.Controllers
         public CricketController(ICricketerRepo cricketerService)
         {
             //_cricketerService = cricketerService;
-            _cricketerService = cricketerService ?? throw new ArgumentNullException(nameof(cricketerService));
+            _cricketerService = cricketerService;
         }
 
         [HttpGet]
-        public  ActionResult GetAll()
+        public ActionResult GetAll()
         {
-            var display =  _cricketerService.GetAll();
+            var display = _cricketerService.GetAll();
             return Ok(display);
         }
 
         [HttpGet]
         public ActionResult GetId(int id)
         {
-            if(id== 0)
+            if (id == 0)
                 return NotFound();
             var display = _cricketerService.Get(id);
 
@@ -37,27 +37,36 @@ namespace Non_database_Project.Controllers
                 return NotFound();
             return Ok(display);
         }
-       
+
         [HttpPost]
         public IActionResult Insert(CricketTeam cricketTeam)
         {
-            var Insert =_cricketerService.Add(cricketTeam);
+            var Insert = _cricketerService.Add(cricketTeam);
 
             if (Insert == null)
             {
                 return NotFound();
             }
             return Ok(Insert);
-            
+
         }
+
         [HttpDelete]
         public IActionResult Remove(int id)
         {
-           
-          _cricketerService.Remove(id);
+
+            _cricketerService.Remove(id);
 
             return Ok();
-            
+        }
+
+        [HttpDelete]
+        public IActionResult Update(CricketTeam cricketTeam)
+        {
+
+            var cricketteam = _cricketerService.Update(cricketTeam);
+
+            return Ok(cricketteam);
         }
     }
 }
