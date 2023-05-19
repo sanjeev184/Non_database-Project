@@ -172,6 +172,48 @@ namespace UnitTest
             }
         }
 
+        [Test]
+        public void GetAll_Call_Repo_Layer_Once()
+        {
+            // var cricketTeams = _fixture.Create<CricketTeam>();
+            var cricketTeams = new List<CricketTeam>()
+            {
+                new CricketTeam
+                {
+                Playerage = 1,
+                Jerseyname = "sanjeev",
+                Jerseynumber = 23,
+                Average = 80
+                }
+            };
+            _cricketServiceMock.Setup(x => x.GetAll()).Returns(cricketTeams);
+
+            var result = _sut.GetAll();
+
+            _cricketServiceMock.Verify(x => x.GetAll(), Times.Once);
+        }
+
+        [Test]
+        public void GetAll_Call_Repo_Layer_200_ok()
+        {
+            var cricketTeams = new List<CricketTeam>()
+            {
+                new CricketTeam
+                {
+                Playerage = 1,
+                Jerseyname = "sanjeev",
+                Jerseynumber = 23,
+                Average = 80
+                }
+            };
+            _cricketServiceMock.Setup(x => x.GetAll()).Returns(cricketTeams);
+            var result = _sut.GetAll();
+            using (new AssertionScope())
+            {
+                result.As<OkObjectResult>().StatusCode.Should().Be(StatusCodes.Status200OK);
+            }
+        }
+
     }
 }
 

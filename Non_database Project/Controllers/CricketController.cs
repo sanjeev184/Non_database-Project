@@ -30,11 +30,13 @@ namespace Non_database_Project.Controllers
         public ActionResult GetId(int id)
         {
             if (id == 0)
-                return NotFound();
+            return NotFound();
             var display = _cricketerService.Get(id);
 
             if (display == null)
+            {
                 return NotFound();
+            }
             return Ok(display);
         }
 

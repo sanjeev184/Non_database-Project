@@ -12,7 +12,7 @@ namespace Non_database_Project.Servicelayer
             Add(new CricketTeam { Jerseynumber = 1, Jerseyname = "virat", Playerage = 20, Average = 3 });
 
         }
-        public IEnumerable<CricketTeam> GetAll()
+        public List<CricketTeam> GetAll()
         {
             return items;
         }
